@@ -51,6 +51,15 @@ export default function App() {
       <Segment from={[-8.7, -5, 0]} to={[8.7, -5, 0]} scale={0.9} />
       <Segment from={[-8.7, -5, 0]} to={[0, 10, 0]} scale={0.9} />
       <Segment from={[8.7, -5, 0]} to={[0, 10, 0]} scale={0.9} />
+
+      <Segment from={[-8.7, -5, 0]} to={[-17.4, 10, 0]} scale={0.9} />
+      <Segment from={[-17.4, 10, 0]} to={[0, 10, 0]} scale={0.9} />
+
+      <Segment from={[0, 10, 0]} to={[17.4, 10, 0]} scale={0.9} />
+      <Segment from={[17.4, 10, 0]} to={[8.7, -5, 0]} scale={0.9} />
+
+      <Segment from={[8.7, -5, 0]} to={[0, -20, 0]} scale={0.9} />
+      <Segment from={[0, -20, 0]} to={[-8.7, -5, 0]} scale={0.9} />
       <OrbitControls />
     </Canvas>
   )
