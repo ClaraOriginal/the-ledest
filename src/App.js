@@ -2,31 +2,41 @@ import { useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 
-function Box({ position, rotation }) {
+function Box({ position, rotation, length }) {
   return (
     <mesh position={position} rotation={rotation}>
-      <boxGeometry args={[0.6, 0.3, 0.3]} />
+      <boxGeometry args={[length, 0.3, 0.3]} />
       <meshStandardMaterial color="orange" />
     </mesh>
   )
 }
 
-function Segment({ from = [0, 0, 0], to = [1, 0, 0], count = 30, scale = 1 }) {
+function Segment({ from = [0, 0, 0], to = [1, 0, 0], count = 30, scale = 1, gap = 0.3 }) {
   const boxes = []
 
   const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]
 
-  const dir = [to[0] - from[0], to[1] - from[1]]
-  const angle = Math.atan2(dir[1], dir[0])
+  const dx = to[0] - from[0]
+  const dy = to[1] - from[1]
+  const length = Math.sqrt(dx * dx + dy * dy)
+
+  const angle = Math.atan2(dy, dx)
+
+  const baseLength = 0.6
+  const boxLength = baseLength * (1 - gap)
+
+  const step = length / count
 
   for (let i = 0; i < count; i++) {
-    const t = i / (count - 1)
+    const dist = i * step + step / 2
+    let t = dist / length
 
-    const tScaled = 0.5 + (t - 0.5) * scale
+    // scale um die Mitte anwenden
+    t = 0.5 + (t - 0.5) * scale
 
-    const pos = lerp(from, to, tScaled)
+    const pos = lerp(from, to, t)
 
-    boxes.push(<Box key={i} position={pos} rotation={[0, 0, angle]} />)
+    boxes.push(<Box key={i} position={pos} rotation={[0, 0, angle]} length={boxLength} />)
   }
 
   return <>{boxes}</>
