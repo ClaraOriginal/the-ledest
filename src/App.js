@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 function Box({ position, rotation, length, segmentId, index, total }) {
   const materialRef = useRef()
@@ -63,7 +64,7 @@ export default function App() {
   return (
     <Canvas>
       <color attach="background" args={['black']} />
-      <ambientLight intensity={0.8} />
+      <ambientLight intensity={3} />
 
       <Segment from={[-8.7, -5, 0]} to={[8.7, -5, 0]} scale={0.9} />
       <Segment from={[-8.7, -5, 0]} to={[0, 10, 0]} scale={0.9} />
@@ -77,6 +78,11 @@ export default function App() {
 
       <Segment from={[8.7, -5, 0]} to={[0, -20, 0]} scale={0.9} />
       <Segment from={[0, -20, 0]} to={[-8.7, -5, 0]} scale={0.9} />
+
+      <EffectComposer>
+        <Bloom intensity={1.5} luminanceThreshold={0.2} luminanceSmoothing={0.9} />
+      </EffectComposer>
+
       <OrbitControls />
     </Canvas>
   )
