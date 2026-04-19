@@ -31,7 +31,7 @@ function Box({ position, rotation, length, segmentId, index, total }) {
   )
 }
 
-function Segment({ from = [0, 0, 0], to = [1, 0, 0], count = 30, scale = 1, gap = 0.3, segmentId = 0 }) {
+function Segment({ from = [0, 0, 0], to = [1, 0, 0], count = 57, scale = 1, gap = 0.3, segmentId = 0 }) {
   const boxes = []
   const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]
 
@@ -41,7 +41,7 @@ function Segment({ from = [0, 0, 0], to = [1, 0, 0], count = 30, scale = 1, gap 
 
   const angle = Math.atan2(dy, dx)
 
-  const baseLength = 0.6
+  const baseLength = length / count
   const boxLength = baseLength * (1 - gap)
 
   const step = length / count
