@@ -2,18 +2,36 @@ import { useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 
-function Box({ position, rotation, length }) {
+function Box({ position, rotation, length, segmentId, index, total }) {
+  const materialRef = useRef()
+
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime()
+
+    const dist = Math.sqrt(position[0] * position[0] + position[1] * position[1] + position[2] * position[2])
+
+    var s = Math.sin(dist * dist * 0.1 - time * 10)
+    s *= 10
+    s = Math.max(-1, Math.min(1, s))
+    s = (s + 1) / 2
+
+    const r = 1
+    const g = 1 - s
+    const b = 0
+
+    materialRef.current.color.setRGB(r, g, b)
+  })
+
   return (
     <mesh position={position} rotation={rotation}>
       <boxGeometry args={[length, 0.3, 0.3]} />
-      <meshStandardMaterial color="orange" />
+      <meshStandardMaterial ref={materialRef} />
     </mesh>
   )
 }
 
-function Segment({ from = [0, 0, 0], to = [1, 0, 0], count = 30, scale = 1, gap = 0.3 }) {
+function Segment({ from = [0, 0, 0], to = [1, 0, 0], count = 30, scale = 1, gap = 0.3, segmentId = 0 }) {
   const boxes = []
-
   const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]
 
   const dx = to[0] - from[0]
@@ -31,12 +49,11 @@ function Segment({ from = [0, 0, 0], to = [1, 0, 0], count = 30, scale = 1, gap 
     const dist = i * step + step / 2
     let t = dist / length
 
-    // scale um die Mitte anwenden
     t = 0.5 + (t - 0.5) * scale
 
     const pos = lerp(from, to, t)
 
-    boxes.push(<Box key={i} position={pos} rotation={[0, 0, angle]} length={boxLength} />)
+    boxes.push(<Box key={i} position={pos} rotation={[0, 0, angle]} length={boxLength} segmentId={segmentId} index={i} total={count} />)
   }
 
   return <>{boxes}</>
