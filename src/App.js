@@ -8,8 +8,9 @@ function Box({ position, rotation, length, segmentId, index, total }) {
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime()
-
-    const dist = Math.sqrt(position[0] * position[0] + position[1] * position[1] + position[2] * position[2])
+    const center = [0, 10, 0]
+    const vec = [position[0] - center[0], position[1] - center[1], position[2] - center[2]]
+    const dist = Math.sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2])
 
     var s = Math.sin(dist * dist * 0.1 - time * 10)
     s *= 10
